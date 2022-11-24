@@ -34,7 +34,7 @@ def validate_category(value:str)->None:
     if not re.match('[A-Za-z0-9- ,]',value):
         raise ValidationError("Category name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
 
-def validate_ean_code_13(value:str)->None:
+def validate_ean_code(value:str)->None: #TODO Sicuro da migliorare
     if len(value) != 13:
         raise ValidationError("EAN-13 Code must be 13 characters long")
     if not re.match('^[0-9]{13}$',value):
