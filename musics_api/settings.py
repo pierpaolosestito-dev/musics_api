@@ -37,8 +37,26 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+    'django.contrib.sites',
 
+    'rest_framework',
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account'
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'corsheaders',
+    'musics.apps.MusicsConfig',
+]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES':[
+
+    ],
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.IsAdminUser' #La policy di default è che devi essere Admin, così se scordiamo di fissare i permessi per una determinata vista entra in gioco la default.
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -120,5 +138,5 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
+SITE_ID = 1
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
