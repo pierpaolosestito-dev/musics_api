@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from djmoney.models.fields import MoneyField
 from djmoney.models.validators import MaxMoneyValidator,MinMoneyValidator
 from django.db import models
-from musics.validators import validate_name, validate_band, validate_record_company, validate_category, \
-    EANCodeValidator
+from musics.validators import validate_name, validate_artist, validate_record_company, validate_genre, \
+    validate_ean
 
 
 #CD:#
@@ -18,12 +18,12 @@ from musics.validators import validate_name, validate_band, validate_record_comp
 # Create your models here.
 class CD(models.Model):
     name = models.CharField(max_length=50,validators=[validate_name])
-    artist = models.CharField(max_length=50,validators=[validate_band])
+    artist = models.CharField(max_length=50, validators=[validate_artist])
     record_company = models.CharField(max_length=50,validators=[validate_record_company])
-    genre = models.CharField(max_length=25,validators=[validate_category])
-    ean_code = models.CharField(max_length=13, validators=[EANCodeValidator.is_valid])
+    genre = models.CharField(max_length=25, validators=[validate_genre])
+    ean_code = models.CharField(max_length=13, validators=[validate_ean])
     published_by = models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
-    price = MoneyField(default=0,max_digits=4,decimal_places=2,default_currency='EUR',validators=[
+    price = MoneyField(default=0,max_digits=8,decimal_places=2,default_currency='EUR',validators=[
             MinMoneyValidator(1),
             MaxMoneyValidator(10000),
         ])#,validators=[validate_price])
