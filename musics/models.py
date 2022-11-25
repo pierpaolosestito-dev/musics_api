@@ -17,10 +17,10 @@ from musics.validators import validate_name, validate_band, validate_record_comp
 # Create your models here.
 class CD(models.Model):
     name = models.CharField(max_length=50,validators=[validate_name])
-    band = models.CharField(max_length=50,validators=[validate_band])
+    artist = models.CharField(max_length=50,validators=[validate_band])
     record_company = models.CharField(max_length=50,validators=[validate_record_company])
-    category = models.CharField(max_length=25,validators=[validate_category])
-    ean_code_13 = models.CharField(max_length=13, validators=[validate_ean_code]) #TODO Validators: Refactoring ean_code_13 validator
+    genre = models.CharField(max_length=25,validators=[validate_category])
+    ean_code = models.CharField(max_length=13, validators=[validate_ean_code]) #TODO Validators: Refactoring ean_code_13 validator
     published_by = models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
