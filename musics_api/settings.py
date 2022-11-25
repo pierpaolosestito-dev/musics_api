@@ -46,11 +46,13 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'corsheaders',
+    'djmoney',
     'musics.apps.MusicsConfig',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
-
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES':[
         'rest_framework.permissions.IsAdminUser' #La policy di default è che devi essere Admin, così se scordiamo di fissare i permessi per una determinata vista entra in gioco la default.
@@ -61,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -88,7 +91,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'musics_api.wsgi.application'
 
-
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERICIATION = "none"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
