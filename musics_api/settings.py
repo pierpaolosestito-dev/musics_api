@@ -55,7 +55,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.IsAdminUser' #La policy di default è che devi essere Admin, così se scordiamo di fissare i permessi per una determinata vista entra in gioco la default.
+        'rest_framework.permissions.IsAdminUser' # La policy di default è che devi essere Admin, così se scordiamo di fissare i permessi per una determinata vista entra in gioco la default.
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
@@ -92,7 +92,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'musics_api.wsgi.application'
 
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERICIATION = "none"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
