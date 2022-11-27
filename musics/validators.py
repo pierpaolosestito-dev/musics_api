@@ -14,26 +14,28 @@ import re
 def validate_name(value:str) -> None:
     if len(value) == 0:
         raise ValidationError('Name must not be empty')
-    if not re.match('[A-Za-z0-9- ,]',value):
+    if not re.match('[A-Za-z0-9- ,!@]',value):
         raise ValidationError("Name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
 
 def validate_artist(value:str)->None:
     if len(value) == 0:
-        raise ValidationError('Band name must not be empty')
-    if not re.match('[A-Za-z0-9- ,]',value):
-        raise ValidationError("Band name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
+        raise ValidationError('Artist name must not be empty')
+    if not re.match('[A-Za-z0-9- ,!@]',value):
+        raise ValidationError("Artist name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
 
 def validate_record_company(value:str)->None:
     if len(value) == 0:
         raise ValidationError('Record company name must not be empty')
-    if not re.match('[A-Za-z0-9- ,]',value):
+    if not re.match('[A-Za-z0-9- ,!@#]',value):
         raise ValidationError("Record company name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
 
 def validate_genre(value:str)->None:
     if len(value) == 0:
-        raise ValidationError('Category name must not be empty')
-    if not re.match('[A-Za-z0-9- ,]',value):
-        raise ValidationError("Category name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
+        raise ValidationError('Genre name must not be empty')
+    if not value[0].isupper():
+        raise ValidationError('Genre must be capitalized')
+    if not re.match('^[A-Z][A-Za-z ]',value):
+        raise ValidationError("Genre name format can contain only letters and whitespaces")
 
 def compact(number):
     """Convert the EAN to the minimal representation. This strips the number
