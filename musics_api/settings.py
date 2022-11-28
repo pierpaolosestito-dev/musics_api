@@ -92,7 +92,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'musics_api.wsgi.application'
 
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERICIATION = "none"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
