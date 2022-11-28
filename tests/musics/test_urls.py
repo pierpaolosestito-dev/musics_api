@@ -1,8 +1,11 @@
 import json
 
+from django.core import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.urls import reverse
-from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_200_OK
+
+from rest_framework.status import HTTP_403_FORBIDDEN, HTTP_200_OK,HTTP_204_NO_CONTENT
 from rest_framework.test import APIClient
 from mixer.backend.django import mixer
 import pytest
@@ -19,6 +22,9 @@ def musics(db):
 def musics_with_published_by(db):
     user_one = mixer.blend(get_user_model())
     user_two = mixer.blend(get_user_model())
+    group = mixer.blend(Group,name="publishers")
+    user_one.groups.add(group)
+    user_two.groups.add(group)
 
     user_two
     return [
@@ -90,13 +96,23 @@ def test_musics_auth_user_get_403_on_other_published_musics_with_DELETE(musics_w
     assert response.status_code == HTTP_403_FORBIDDEN
 
 # def tests_musics_auth_user_get_200_on_own_published_musics_with_PUT(musics_with_published_by):
-#     path = reverse('musics-detail', kwargs={'pk': musics_with_published_by[0].pk})
-#     client = get_client(musics_with_published_by[0].published_by)
-#     response = client.put(path)
-#     assert response.status_code == HTTP_200_OK
-#
-# def tests_musics_auth_user_get_200_on_own_published_musics_with_DELETE(musics_with_published_by): #da sistemare
-#     path = reverse('musics-detail', kwargs={'pk': musics_with_published_by[0].pk})
-#     client = get_client(musics_with_published_by[0].published_by)
-#     response = client.put(path)
-#     assert response.status_code == HTTP_200_OK
+#      path = reverse('musics-detail', kwargs={'pk': musics_with_published_by[0].pk})
+#      client = get_client(musics_with_published_by[0].published_by)
+#      #print(json.dumps(mixer.blend('musics.CD',artist="Pink Floyd")))
+#      datas = serializers.serialize('json', mixer.blend('musics.CD',artist='Pink Floyd',))
+#      response = client.put(path,data=datas)
+#      assert response.status_code == HTTP_200_OK
+
+def tests_musics_auth_user_get_200_on_own_published_musics_with_DELETE(musics_with_published_by): #da sistemare
+     path = reverse('musics-detail', kwargs={'pk': musics_with_published_by[0].pk})
+     client = get_client(musics_with_published_by[0].published_by)
+     response = client.delete(path)
+     assert response.status_code == HTTP_204_NO_CONTENT
+
+def tests_music_anon_user_get_403_on_POST():
+    path = reverse('musics-list')
+    client = get_client()
+    response = client.post(path)
+    assert response.status_code == HTTP_403_FORBIDDEN
+
+#ANONUSERCAN'TPOST - AUSERCANPOST

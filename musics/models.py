@@ -31,5 +31,5 @@ class CD(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.band + " " + self.name
+        return self.artist + " " + self.name
 
