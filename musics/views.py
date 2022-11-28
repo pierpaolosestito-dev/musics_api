@@ -6,8 +6,8 @@ from musics.models import CD
 from musics.serializers import CDSerializer
 from musics.permissions import IsPublisherOrReadOnly
 
-
+# Create your views here.
 class CDViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsPublisherOrReadOnly | permissions.IsAdminUser]
+    permission_classes = [IsPublisherOrReadOnly|permissions.IsAdminUser]
     queryset = CD.objects.all()
     serializer_class = CDSerializer
