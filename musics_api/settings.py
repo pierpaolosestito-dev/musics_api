@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djmoney',
     'musics.apps.MusicsConfig',
+    #'djmoney.apps.MoneyConfig',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
