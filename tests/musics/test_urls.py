@@ -115,4 +115,5 @@ def tests_music_anon_user_get_403_on_POST():
     response = client.post(path)
     assert response.status_code == HTTP_403_FORBIDDEN
 
-#ANONUSERCAN'TPOST - AUSERCANPOST
+#TODO A user can post
+#TODO Test CDByArtist,CDByName,CDByPublishedBy
