@@ -1,10 +1,11 @@
+from dj_rest_auth.registration.views import RegisterView
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets,generics
 from rest_framework import permissions
 from rest_framework.permissions import AllowAny
 from musics.models import CD
-from musics.serializers import CDSerializer
+from musics.serializers import CDSerializer, RegistrationSerializer
 from musics.permissions import IsPublisherOrReadOnly
 
 # Create your views here.
@@ -44,3 +45,10 @@ class CDByPublishedBy(generics.ListAPIView):
         publishedby = self.request.query_params.get('publishedby')
         cd_by_published = CD.objects.filter(published_by=publishedby)
         return cd_by_published
+
+
+class RegistrationView(RegisterView):
+    serializer_class = RegistrationSerializer
+
+    def get_queryset(self):
+        pass
