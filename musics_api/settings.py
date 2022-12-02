@@ -50,6 +50,10 @@ INSTALLED_APPS = [
     'musics.apps.MusicsConfig',
     #'djmoney.apps.MoneyConfig',
 ]
+
+REST_AUTH_SERIALIZERS = {
+    'TOKEN_SERIALIZER': 'musics.serializers.TokenSerializer',
+}
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
         'rest_framework.authentication.SessionAuthentication',

@@ -117,3 +117,4 @@ def tests_music_anon_user_get_403_on_POST():
 
 #TODO A user can post
 #TODO Test CDByArtist,CDByName,CDByPublishedBy
+#TODO a normal/anon user cannot see docs and schema

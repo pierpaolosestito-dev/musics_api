@@ -15,6 +15,7 @@ class CDViewSet(viewsets.ModelViewSet):
     serializer_class = CDSerializer
 
 
+
 #CDByArtist,CDByPublishedBy,CDByName
 class CDByArtist(generics.ListAPIView):
     permission_classes = [IsPublisherOrReadOnly|permissions.IsAdminUser]
