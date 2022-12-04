@@ -75,6 +75,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:4200',  # angular front-end server
+]
+
 ROOT_URLCONF = 'musics_api.urls'
 
 TEMPLATES = [
