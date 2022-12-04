@@ -37,37 +37,31 @@ def validate_genre(value:str)->None:
     if not re.match('^[A-Z][A-Za-z ]',value):
         raise ValidationError("Genre name format can contain only letters and whitespaces")
 
-def compact(number):
-    """Convert the EAN to the minimal representation. This strips the number
-    of any valid separators and removes surrounding whitespace."""
-    return clean(number, ' -').strip()
-
-def calc_check_digit(number):
-        """Calculate the EAN check digit for 13-digit numbers. The number passed
-        should not have the check bit included."""
-        return str((10 - sum((3, 1)[i % 2] * int(n)
-                             for i, n in enumerate(reversed(number)))) % 10)
-
-
-def validate(number):
-    """Check if the number provided is a valid EAN-13. This checks the length
-    and the check bit but does not check whether a known GS1 Prefix and
-    company identifier are referenced."""
-    number = compact(number)
-    if not isdigits(number):
-        raise ValidationError("EANCode is structured with numbers.")
-    if len(number) not in (14, 13, 12, 8):
-        raise ValidationError("EANCode length isn't correct.")
-    if calc_check_digit(number[:-1]) != number[-1]:
-        raise ValidationError("Checksum fails.")
-    return number
+def ean_calc_check_digit(number):
+    """Calculate the EAN check digit for 13-digit numbers. The number passed
+    should not have the check bit included."""
+    return str((10 - sum((3, 1)[i % 2] * int(n)
+                         for i, n in enumerate(reversed(number)))) % 10)
 
 def validate_ean(number):
     """Check if the number provided is a valid EAN-13. This checks the length
     and the check bit but does not check whether a known GS1 Prefix and
     company identifier are referenced."""
+    number = clean(number, ' -').strip()
+    if not isdigits(number):
+        raise ValidationError("EANCode is structured with numbers.")
+    if len(number) not in (14, 13, 12, 8):
+        raise ValidationError("EANCode length isn't correct.")
+    if ean_calc_check_digit(number[:-1]) != number[-1]:
+        raise ValidationError("Checksum fails.")
+    return number
+
+def ean_is_valid(number):
+    """Check if the number provided is a valid EAN-13. This checks the length
+    and the check bit but does not check whether a known GS1 Prefix and
+    company identifier are referenced."""
     try:
-        return bool(validate(number))
+        return bool(validate_ean(number))
     except ValidationError:
         return False
 

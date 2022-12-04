@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from djmoney.models.fields import MoneyField
-from djmoney.models.validators import MaxMoneyValidator,MinMoneyValidator
 from django.db import models
+from djmoney.models.fields import MoneyField
+from djmoney.models.validators import MaxMoneyValidator, MinMoneyValidator
+
 from musics.validators import validate_name, validate_artist, validate_record_company, validate_genre, \
     validate_ean
 

@@ -4,7 +4,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from mixer.backend.django import mixer
 
-from musics.validators import validate_ean
+from musics.validators import ean_is_valid
 
 
 def test_cd_name_of_length_51_raises_exception(db):
@@ -85,7 +85,7 @@ def test_cd_genre_first_letter_is_uppser(db):
 #TODO: eancode,published_by
 def test_correct_ean_code(db):
     cd = mixer.blend('musics.CD',ean_code="978020137962")
-    assert validate_ean(cd.ean_code)
+    assert ean_is_valid(cd.ean_code)
 
 def test_cd_wrong_ean_code(db):
     cd = mixer.blend('musics.CD',ean_code="978020137963A")
