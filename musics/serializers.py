@@ -3,13 +3,18 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from django.contrib.auth.models import Group, User
 from djmoney.contrib.django_rest_framework import MoneyField
 from rest_framework import serializers
-
+from rest_framework.exceptions import ValidationError
 
 from musics.models import CD
 
 class CDSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="published_by.username",read_only=True)
     price = MoneyField(max_digits=8,decimal_places=2)
+
+    def create(self, validated_data):
+        if validated_data['published_by'] != self.context['request'].user:
+            raise ValidationError("Published by must be the same as request user")
+        return super(CDSerializer, self).create(validated_data)
     class Meta:
         fields = ('id', 'name', 'artist', 'record_company', 'genre', 'ean_code',
                   'price', 'price_currency', 'published_by', 'user', 'created_at', 'updated_at')

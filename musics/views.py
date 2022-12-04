@@ -16,12 +16,12 @@ class CDViewSet(viewsets.ModelViewSet):
     serializer_class = CDSerializer
 
 
-
 #CDByArtist,CDByPublishedBy,CDByName
 class CDByArtist(generics.ListAPIView):
     permission_classes = [IsPublisherOrReadOnly|permissions.IsAdminUser]
     model = CD
     serializer_class = CDSerializer
+
 
     def get_queryset(self):
         artist = self.request.query_params.get('artist')
