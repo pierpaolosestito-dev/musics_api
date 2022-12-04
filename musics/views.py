@@ -1,4 +1,5 @@
 from dj_rest_auth.registration.views import RegisterView
+from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import viewsets,generics
@@ -44,7 +45,8 @@ class CDByPublishedBy(generics.ListAPIView):
 
     def get_queryset(self):
         publishedby = self.request.query_params.get('publishedby')
-        cd_by_published = CD.objects.filter(published_by=publishedby)
+        published_by_id = User.objects.filter(username=publishedby).id
+        cd_by_published = CD.objects.filter(published_by=published_by_id)
         return cd_by_published
 
 
