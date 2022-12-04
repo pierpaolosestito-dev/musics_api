@@ -23,10 +23,10 @@ class CD(models.Model):
     genre = models.CharField(max_length=25, validators=[validate_genre])
     ean_code = models.CharField(max_length=13, validators=[validate_ean])
     published_by = models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
-    price = MoneyField(default=1,default_currency='EUR',max_digits=10,decimal_places=2,validators=[
-             # MinMoneyValidator({'EUR':1.00}),
-             # MaxMoneyValidator({'EUR':10000.00}),
-        ])
+    price = MoneyField(default=1,default_currency='EUR',max_digits=8,decimal_places=2,validators=[
+        MinMoneyValidator(1),
+        MaxMoneyValidator(10000),
+    ])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
 
