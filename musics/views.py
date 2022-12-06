@@ -45,7 +45,8 @@ class CDByPublishedBy(generics.ListAPIView):
 
     def get_queryset(self):
         publishedby = self.request.query_params.get('publishedby')
-        published_by_id = User.objects.filter(username=publishedby).id
+        print(publishedby)
+        published_by_id = User.objects.get(username=publishedby).id
         cd_by_published = CD.objects.filter(published_by=published_by_id)
         return cd_by_published
 
