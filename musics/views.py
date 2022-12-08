@@ -25,7 +25,7 @@ class CDByArtist(generics.ListAPIView):
 
     def get_queryset(self):
         artist = self.request.query_params.get('artist')
-        cd_by_artist = CD.objects.filter(artist=artist)
+        cd_by_artist = CD.objects.filter(artist__iexact=artist)
         return cd_by_artist
 
 class CDByName(generics.ListAPIView):
@@ -35,7 +35,7 @@ class CDByName(generics.ListAPIView):
 
     def get_queryset(self):
         name = self.request.query_params.get('name')
-        cd_by_name = CD.objects.filter(name=name)
+        cd_by_name = CD.objects.filter(name__iexact=name)
         return cd_by_name
 
 class CDByPublishedBy(generics.ListAPIView):
@@ -45,8 +45,7 @@ class CDByPublishedBy(generics.ListAPIView):
 
     def get_queryset(self):
         publishedby = self.request.query_params.get('publishedby')
-        print(publishedby)
-        published_by_id = User.objects.get(username=publishedby).id
+        published_by_id = User.objects.get(username__iexact=publishedby).id
         cd_by_published = CD.objects.filter(published_by=published_by_id)
         return cd_by_published
 
