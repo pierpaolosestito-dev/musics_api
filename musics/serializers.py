@@ -3,30 +3,36 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from django.contrib.auth.models import Group, User
 from djmoney.contrib.django_rest_framework import MoneyField
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 
 from musics.models import CD
 
+
 class CDSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(source="published_by.username",read_only=True)
-    price = MoneyField(max_digits=8,decimal_places=2)
+    user = serializers.CharField(source="published_by.username", read_only=True)
+    price = MoneyField(max_digits=8, decimal_places=2)
 
     def create(self, validated_data):
-        if validated_data['published_by'] != self.context['request'].user:
-            raise ValidationError("Published by must be the same as request user")
+        validated_data['published_by'] = self.context['request'].user  # published_by must be the context user
         return super(CDSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        validated_data['published_by'] = instance.published_by  # published_by should never change
+        return super(CDSerializer, self).create(validated_data)
+
     class Meta:
         fields = ('id', 'name', 'artist', 'record_company', 'genre', 'ean_code',
                   'price', 'price_currency', 'published_by', 'user', 'created_at', 'updated_at')
         model = CD
 
 
-list_allowed_group = ['publishers']
+REGISTRATION_ALLOWED_GROUPS = ['publishers']
+
+
 class RegistrationSerializer(RegisterSerializer):
     group = serializers.CharField(required=False)
 
     def validate(self, data):
-        if 'group' in data and data['group'] not in list_allowed_group:
+        if 'group' in data and data['group'] not in REGISTRATION_ALLOWED_GROUPS:
             raise serializers.ValidationError({"group": "Group isn't allowed"})
         return super().validate(data)
 
@@ -36,15 +42,24 @@ class RegistrationSerializer(RegisterSerializer):
             group = Group.objects.get(name=validated_group)
             group.user_set.add(user)
 
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id','username'
+            'id', 'username'
         )
+
+
 class TokenSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False,read_only=True)
+    user = UserSerializer(many=False, read_only=True)
+
     class Meta:
         model = TokenModel
-        fields = ('key','user')
+        fields = ('key', 'user')

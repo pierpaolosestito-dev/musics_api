@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'djmoney',
     'musics.apps.MusicsConfig',
-    #'djmoney.apps.MoneyConfig',
 ]
 
 REST_AUTH_SERIALIZERS = {
@@ -62,7 +61,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES':[
-        'rest_framework.permissions.IsAdminUser' #La policy di default è che devi essere Admin, così se scordiamo di fissare i permessi per una determinata vista entra in gioco la default.
+        'rest_framework.permissions.IsAdminUser'  # la policy di default è che devi essere Admin
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
