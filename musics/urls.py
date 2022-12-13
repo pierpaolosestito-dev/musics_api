@@ -7,8 +7,8 @@ router = SimpleRouter()
 router.register('', CDViewSet, basename="musics")
 
 urlpatterns = [
-    path('byartist', CDByArtist.as_view()),
-    path('byname', CDByName.as_view()),
-    path('by_published_by', CDByPublishedBy.as_view())
+    path('byartist', CDByArtist.as_view(),name="byartist"),
+    path('byname', CDByName.as_view(),name="byname"),
+    path('by_published_by', CDByPublishedBy.as_view(),name="bypublishedby")
 ]
 urlpatterns += router.urls

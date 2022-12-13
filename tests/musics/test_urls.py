@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlencode
 
 import pytest
 from django.contrib.auth import get_user_model
@@ -11,12 +12,24 @@ from rest_framework.test import APIClient
 
 @pytest.fixture()
 def musics(db):
+    user_one = mixer.blend(get_user_model())
+    group = mixer.blend(Group, name="publishers")
+    user_one.groups.add(group)
+
     return [
         mixer.blend('musics.CD'),
         mixer.blend('musics.CD'),
         mixer.blend('musics.CD'),
+        mixer.blend('musics.CD',artist="PinkFloyd"),
+        mixer.blend('musics.CD',artist="PinkFloyd",name="A",published_by=user_one)
     ]
 
+@pytest.fixture()
+def users(db):
+    user_one = mixer.blend(get_user_model())
+    group = mixer.blend(Group, name="publishers")
+    user_one.groups.add(group)
+    return user_one
 
 @pytest.fixture()
 def musics_with_published_by(db):
@@ -72,14 +85,33 @@ def test_musics_anon_user_get_403_with_PUT(musics):
     response = client.put(path)
     assert response.status_code == HTTP_403_FORBIDDEN
 
-
 def test_musics_anon_user_get_200_with_GET(musics):
-    path = reverse('musics-list')
+    path = reverse('musics-list') #/musics/byartist?artist=
     client = get_client()
     response = client.get(path)
     assert response.status_code == HTTP_200_OK
     obj = parse(response)
     assert len(obj) == len(musics)
+def reverse_querystring(view, urlconf=None, args=None, kwargs=None, current_app=None, query_kwargs=None):
+    base_url = reverse(view, urlconf=urlconf, args=args, kwargs=kwargs, current_app=current_app)
+    if query_kwargs:
+        return '{}?{}'.format(base_url, urlencode(query_kwargs))
+    return base_url
+
+
+def test_musics_anon_user_get_200_with_GET_by_artist(musics):
+    path = reverse_querystring('byartist',query_kwargs={'artist':musics[4].artist})
+    client = get_client()
+    response = client.get(path)
+    assert response.status_code == HTTP_200_OK
+    obj = parse(response)
+    assert len(obj) == 2
+
+def test_musics_anon_user_get_200_with_GET_by_name(musics):
+    path = reverse_querystring('byname',query_kwargs={'name':musics[4].name})
+    client = get_client()
+    response = client.get(path)
+    assert response.status_code == HTTP_200_OK
 
 
 def test_musics_anon_user_get_200_with_GET_a_single_post(musics):
@@ -125,6 +157,7 @@ def tests_music_anon_user_get_403_on_POST():
     client = get_client()
     response = client.post(path)
     assert response.status_code == HTTP_403_FORBIDDEN
+
 
 # TODO A user can post
 # TODO Test CDByArtist,CDByName,CDByPublishedBy
