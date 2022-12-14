@@ -4,7 +4,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from mixer.backend.django import mixer
 
-from musics.validators import ean_is_valid
+from musics.validators import ean_is_valid, validate_genre, validate_record_company, validate_artist, validate_name
 
 
 def test_cd_name_of_length_51_raises_exception(db):
@@ -19,9 +19,14 @@ def test_cd_empty_name_exception(db):
         cd.full_clean()
 
 
+def test_validator_empty_cd_name_raises_exceptions(db):
+    with pytest.raises(ValidationError, match='Name must not be empty') as err:
+        validate_name('')
+
+
 def test_cd_contains_wrong_char(db):
-    cd = mixer.blend('musics.CD', name="Pink@Floyd!")
-    with pytest.raises(ValidationError) as err:
+    cd = mixer.blend('musics.CD', name="Pink@Floyd!?")
+    with pytest.raises(ValidationError, match='Name format can contain only letters*') as err:
         cd.full_clean()
 
 
@@ -40,8 +45,13 @@ def test_cd_empty_artist_name_raises_exception(db):
 
 def test_cd_artist_name_contains_wrong_chars_raises_exception(db):
     cd = mixer.blend('musics.CD', artist="John!@\nLennon")
-    with pytest.raises(ValidationError) as err:
+    with pytest.raises(ValidationError, match='Artist name format can contain only letters*') as err:
         cd.full_clean()
+
+
+def test_validator_empty_artist_name_raises_exceptions(db):
+    with pytest.raises(ValidationError, match='Artist name must not be empty') as err:
+        validate_artist('')
 
 
 # RECORD_COMPANY
@@ -58,9 +68,14 @@ def test_cd_empty_record_company_name_raises_exceptions(db):
 
 
 def test_cd_record_company_name_contains_wrong_chars_raises_exceptions(db):
-    cd = mixer.blend('musics.CD', record_company="SonyMusic@@@")
-    with pytest.raises(ValidationError) as err:
+    cd = mixer.blend('musics.CD', record_company="SonyMusic@@@?")
+    with pytest.raises(ValidationError, match='Record company name format can contain only letters*') as err:
         cd.full_clean()
+
+
+def test_validator_empty_record_company_raises_exceptions(db):
+    with pytest.raises(ValidationError, match='Record company name must not be empty') as err:
+        validate_record_company('')
 
 
 # GENRE
@@ -76,9 +91,14 @@ def test_cd_empty_genre_raises_exceptions(db):
         cd.full_clean()
 
 
+def test_validator_empty_genre_raises_exceptions(db):
+    with pytest.raises(ValidationError, match='Genre name must not be empty') as err:
+        validate_genre('')
+
+
 def test_cd_genre_contains_wrong_chars_raises_exception(db):
-    cd = mixer.blend('musics.CD', genre="Rock@")
-    with pytest.raises(ValidationError) as err:
+    cd = mixer.blend('musics.CD',genre="Rock@")
+    with pytest.raises(ValidationError, match="Genre name format can contain only letters and whitespaces") as err:
         cd.full_clean()
 
 
@@ -94,9 +114,26 @@ def test_correct_ean_code(db):
     assert ean_is_valid(cd.ean_code)
 
 
+def test_wrong_ean_code(db):
+    cd = mixer.blend('musics.CD', ean_code="978020137962A")
+    assert not ean_is_valid(cd.ean_code)
+
+
 def test_cd_wrong_ean_code(db):
     cd = mixer.blend('musics.CD', ean_code="978020137963A")
     with pytest.raises(ValidationError) as err:
+        cd.full_clean()
+
+
+def test_cd_wrong_ean_code_checksum(db):
+    cd = mixer.blend('musics.CD', ean_code="978020137963")
+    with pytest.raises(ValidationError, match="Checksum fails.") as err:
+        cd.full_clean()
+
+
+def test_cd_wrong_ean_code_length(db):
+    cd = mixer.blend('musics.CD', ean_code="97802")
+    with pytest.raises(ValidationError, match="EANCode length isn't correct.") as err:
         cd.full_clean()
 
 
@@ -127,7 +164,9 @@ def test_cd_created_at_today_is_equal_at_actual_date(db):
 
 def test_cd_created_at_is_equal_at_updated_at_at_first_time(db):
     cd = mixer.blend('musics.CD')
-    assert cd.created_at == cd.updated_at
+    assert cd.created_at.day == cd.updated_at.day
+    assert cd.created_at.month == cd.updated_at.month
+    assert cd.created_at.year == cd.updated_at.year
 
 # def test_cd_updated_at_changes_when_entry_is_updated(db):
 #     cd = mixer.blend('musics.CD',name="Rino")

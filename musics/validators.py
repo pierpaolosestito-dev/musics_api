@@ -16,7 +16,7 @@ import re
 def validate_name(value: str) -> None:
     if len(value) == 0:
         raise ValidationError('Name must not be empty')
-    if not re.match('[A-Za-z0-9- ,!@]', value):
+    if not re.match('[A-Za-z0-9- ,!@]*$', value):
         raise ValidationError(
             "Name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
 
@@ -24,7 +24,7 @@ def validate_name(value: str) -> None:
 def validate_artist(value: str) -> None:
     if len(value) == 0:
         raise ValidationError('Artist name must not be empty')
-    if not re.match('[A-Za-z0-9- ,!@]', value):
+    if not re.match('[A-Za-z0-9- ,!@]*$', value):
         raise ValidationError(
             "Artist name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
 
@@ -32,7 +32,7 @@ def validate_artist(value: str) -> None:
 def validate_record_company(value: str) -> None:
     if len(value) == 0:
         raise ValidationError('Record company name must not be empty')
-    if not re.match('[A-Za-z0-9- ,!@#]', value):
+    if not re.match('[A-Za-z0-9- ,!@#]*$', value):
         raise ValidationError(
             "Record company name format can contain only letters,numbers and special characters as '-', ',' and whitespaces")
 
@@ -42,7 +42,7 @@ def validate_genre(value: str) -> None:
         raise ValidationError('Genre name must not be empty')
     if not value[0].isupper():
         raise ValidationError('Genre must be capitalized')
-    if not re.match('^[A-Z][A-Za-z ]', value):
+    if not re.match('[a-zA-Z ]*$', value):
         raise ValidationError("Genre name format can contain only letters and whitespaces")
 
 
