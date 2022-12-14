@@ -113,6 +113,11 @@ def test_musics_anon_user_get_200_with_GET_by_name(musics):
     response = client.get(path)
     assert response.status_code == HTTP_200_OK
 
+def test_musics_anon_user_get_200_with_GET_by_published_by(musics):
+    path = reverse_querystring('bypublishedby',query_kwargs={'publishedby':musics[4].published_by})
+    client = get_client()
+    response = client.get(path)
+    assert response.status_code == HTTP_200_OK
 
 def test_musics_anon_user_get_200_with_GET_a_single_post(musics):
     path = reverse('musics-detail', kwargs={'pk': musics[0].pk})

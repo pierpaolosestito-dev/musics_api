@@ -17,7 +17,7 @@ class CDSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         validated_data['published_by'] = instance.published_by  # published_by should never change
-        return super(CDSerializer, self).create(validated_data)
+        return super(CDSerializer, self).update(instance,validated_data)
 
     class Meta:
         fields = ('id', 'name', 'artist', 'record_company', 'genre', 'ean_code',
