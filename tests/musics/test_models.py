@@ -108,7 +108,6 @@ def test_cd_genre_first_letter_is_uppser(db):
         cd.full_clean()
 
 
-# TODO: eancode,published_by
 def test_correct_ean_code(db):
     cd = mixer.blend('musics.CD', ean_code="978020137962")
     assert ean_is_valid(cd.ean_code)
