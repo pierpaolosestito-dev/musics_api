@@ -8,9 +8,11 @@ from musics.validators import ean_is_valid, validate_genre, validate_record_comp
 
 
 def test_cd_name_of_length_51_raises_exception(db):
-    cd = mixer.blend('musics.CD', name="B" * 51)
-    with pytest.raises(ValidationError) as err:
+    cd = mixer.blend('musics.CD',name="B"*51)
+    print(cd)
+    with pytest.raises(ValidationError,match="Ensure this value has at most 50 characters") as err:
         cd.full_clean()
+    print(str(err.value))
 
 
 def test_cd_empty_name_exception(db):
@@ -33,7 +35,7 @@ def test_cd_contains_wrong_char(db):
 # ARTIST
 def test_cd_artist_name_of_length_51_raises_exception(db):
     cd = mixer.blend('musics.CD', artist="B" * 51)
-    with pytest.raises(ValidationError) as err:
+    with pytest.raises(ValidationError,match='Ensure this value has at most 50 character') as err:
         cd.full_clean()
 
 
@@ -57,12 +59,12 @@ def test_validator_empty_artist_name_raises_exceptions(db):
 # RECORD_COMPANY
 def test_cd_record_company_of_length_51_raises_exceptions(db):
     cd = mixer.blend('musics.CD', record_company="B" * 51)
-    with pytest.raises(ValidationError) as err:
+    with pytest.raises(ValidationError,match='Ensure this value has at most 50 characters') as err:
         cd.full_clean()
 
 
 def test_cd_empty_record_company_name_raises_exceptions(db):
-    cd = mixer.blend('musics.CD', record_company="" * 51)
+    cd = mixer.blend('musics.CD', record_company="")
     with pytest.raises(ValidationError) as err:
         cd.full_clean()
 
@@ -81,7 +83,7 @@ def test_validator_empty_record_company_raises_exceptions(db):
 # GENRE
 def test_cd_genre_of_length_26_raises_exceptions(db):
     cd = mixer.blend('musics.CD', genre="B" * 26)
-    with pytest.raises(ValidationError) as err:
+    with pytest.raises(ValidationError,match="Ensure this value has at most 25 characters") as err:
         cd.full_clean()
 
 
