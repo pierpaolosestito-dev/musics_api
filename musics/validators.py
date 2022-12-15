@@ -36,17 +36,11 @@ def validate_genre(value: str) -> None:
 
 
 def ean_calc_check_digit(number):
-    """Calculate the EAN check digit for 13-digit numbers. The number passed
-    should not have the check bit included."""
     return str((10 - sum((3, 1)[i % 2] * int(n)
                          for i, n in enumerate(reversed(number)))) % 10)
 
 
 def validate_ean(number):
-    """Check if the number provided is a valid EAN-13. This checks the length
-    and the check bit but does not check whether a known GS1 Prefix and
-    company identifier are referenced."""
-    number = clean(number, ' -').strip()
     if not isdigits(number):
         raise ValidationError("EANCode is structured with numbers.")
     if len(number) not in (14, 13, 12, 8):
@@ -57,10 +51,8 @@ def validate_ean(number):
 
 
 def ean_is_valid(number):
-    """Check if the number provided is a valid EAN-13. This checks the length
-    and the check bit but does not check whether a known GS1 Prefix and
-    company identifier are referenced."""
     try:
-        return bool(validate_ean(number))
+        validate_ean(number)
+        return True
     except ValidationError:
         return False

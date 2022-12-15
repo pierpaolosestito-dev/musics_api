@@ -43,10 +43,10 @@ class CDByPublishedBy(generics.ListAPIView):
     serializer_class = CDSerializer
 
     def get_queryset(self):
-        publishedby = self.request.query_params.get('publishedby')
-        published_by_id = User.objects.filter(username__icontains=publishedby)
+        published_by_search = self.request.query_params.get('publishedby')
+        published_by_users = User.objects.filter(username__icontains=published_by_search)
         cd_by_published = []
-        for u in published_by_id:
+        for u in published_by_users:
             cd_by_published += CD.objects.filter(published_by=u.id)
         return cd_by_published
 

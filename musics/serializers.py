@@ -52,6 +52,7 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('name',)
+
 class UserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True)
     class Meta:
@@ -59,7 +60,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'username','is_superuser','groups',
         )
-
 
 class TokenSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
