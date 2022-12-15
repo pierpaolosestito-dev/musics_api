@@ -35,22 +35,21 @@ def validate_genre(value: str) -> None:
         raise ValidationError("Genre name format can contain only letters and whitespaces")
 
 
-def ean_calc_check_digit(number):
+def ean_calc_check_digit(number: str):
     return str((10 - sum((3, 1)[i % 2] * int(n)
                          for i, n in enumerate(reversed(number)))) % 10)
 
 
-def validate_ean(number):
+def validate_ean(number: str):
     if not isdigits(number):
         raise ValidationError("EANCode is structured with numbers.")
     if len(number) not in (14, 13, 12, 8):
         raise ValidationError("EANCode length isn't correct.")
     if ean_calc_check_digit(number[:-1]) != number[-1]:
         raise ValidationError("Checksum fails.")
-    return number
 
 
-def ean_is_valid(number):
+def ean_is_valid(number: str):
     try:
         validate_ean(number)
         return True
