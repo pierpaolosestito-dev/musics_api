@@ -48,12 +48,16 @@ class RegistrationSerializer(RegisterSerializer):
     def create(self, validated_data):
         pass
 
-
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('name',)
 class UserSerializer(serializers.ModelSerializer):
+    groups = GroupSerializer(many=True)
     class Meta:
         model = User
         fields = (
-            'id', 'username'
+            'id', 'username','is_superuser','groups',
         )
 
 
